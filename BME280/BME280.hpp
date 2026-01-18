@@ -11,8 +11,9 @@ private:
     i2c_inst_t* _i2c;
     uint8_t _sda;
     uint8_t _scl;
-    uint16_t _dig_T1;
-    int16_t _dig_T2, _dig_T3;
+    uint16_t _dig_T1, _dig_H1, _dig_H3;
+    int16_t _dig_T2, _dig_T3, _dig_H2, _dig_H4, _dig_H5;
+    int8_t _dig_H6;
     int32_t _t_fine;
     uint8_t _mode;
 
@@ -24,6 +25,9 @@ private:
      */
     int16_t read_reg_16(uint8_t reg);
 
+    int8_t read_reg_8(uint8_t reg);
+
+    int16_t read_reg_16_special(uint8_t reg, int8_t specifier);
 
 public:
 
@@ -46,8 +50,22 @@ public:
      * @param mode NORMAL, FORCED, SLEEP (default FORCED)
      */
     void begin(uint8_t mode = FORCED);
+    /**
+     * @brief Requests temp read, returns value in Celcius
+     */
     float read_temp_c();
+    /**
+     * @brief Request temp read, returns value in Farenheit
+     */
     float read_temp_f();
+    /**
+     * @brief Unimplimented
+     */
+    float read_pressure();
+    /**
+     * @brief Unimplimented
+     */
+    float read_humidity();
 
     // Registers //
 
@@ -78,6 +96,16 @@ public:
        DIG_T2_UPPER = 0x8B,
        DIG_T3_LOWER = 0x8C,
        DIG_T3_UPPER = 0x8D,
+       DIG_H1_FULL = 0xA1,
+       DIG_H2_LOWER = 0xE1,
+       DIG_H2_UPPER = 0xE2,
+       DIG_H3_FULL = 0xE3,
+       DIG_H4_UPPER = 0xE4,  // Upper is stored first, unlike all of the others.
+       DIG_H4_LOWER = 0xE5,  // Lower 4 bits stored on lower 4 bits 
+       DIG_H5_lower = 0xE5,  // Lower 4 bits stored in upper 4 bits
+       DIG_H5_UPPER = 0xE6,
+       DIG_H6_FULL = 0xE7
+
 
     };
     enum BME280_Control_Hex_Values: uint8_t{
