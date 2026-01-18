@@ -30,18 +30,21 @@ void BME280::begin(uint8_t mode) {
 float BME280::read_temp_c() {
     switch (_mode)
     {
-    case NORMAL:
+    case NORMAL:{
         /* code */
         break;
+    }
     case FORCED:{
         uint8_t forced_read[] = {MEASURE_CONTROL ,FORCED_READ_T1P0};
         i2c_write_blocking(_i2c,_sensor_address,forced_read,2, true);
         break;
     }
-    case SLEEP:
+    case SLEEP:{
         break;
-    default:
+    }
+    default:{
         break;
+    }
     }
     // 2. Wait for ready
     uint8_t status;
